@@ -23,6 +23,53 @@ import type { FunctionReference } from "convex/server";
  */
 export type ComponentApi<Name extends string | undefined = string | undefined> =
   {
+    deliveryAttempts: {
+      add: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          attemptNumber: number;
+          deliveryId: string;
+          durationMs?: number;
+          endpointId: string;
+          error?: string;
+          requestTimestamp: number;
+          responseBody?: string;
+          responseStatus?: number;
+          success: boolean;
+        },
+        any,
+        Name
+      >;
+      get: FunctionReference<
+        "query",
+        "internal",
+        { attemptId: string },
+        any,
+        Name
+      >;
+      listByDelivery: FunctionReference<
+        "query",
+        "internal",
+        { deliveryId: string },
+        any,
+        Name
+      >;
+      listByEndpoint: FunctionReference<
+        "query",
+        "internal",
+        { endpointId: string },
+        any,
+        Name
+      >;
+      remove: FunctionReference<
+        "mutation",
+        "internal",
+        { attemptId: string },
+        any,
+        Name
+      >;
+    };
     eventCategories: {
       create: FunctionReference<
         "mutation",
@@ -68,53 +115,6 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
           eventCategoryId: string;
           tenantId?: string;
         },
-        any,
-        Name
-      >;
-    };
-    deliveryAttempts: {
-      add: FunctionReference<
-        "mutation",
-        "internal",
-        {
-          attemptNumber: number;
-          deliveryId: string;
-          endpointId: string;
-          requestTimestamp: number;
-          success: boolean;
-          durationMs?: number;
-          error?: string;
-          responseBody?: string;
-          responseStatus?: number;
-        },
-        any,
-        Name
-      >;
-      get: FunctionReference<
-        "query",
-        "internal",
-        { attemptId: string },
-        any,
-        Name
-      >;
-      listByDelivery: FunctionReference<
-        "query",
-        "internal",
-        { deliveryId: string },
-        any,
-        Name
-      >;
-      listByEndpoint: FunctionReference<
-        "query",
-        "internal",
-        { endpointId: string },
-        any,
-        Name
-      >;
-      remove: FunctionReference<
-        "mutation",
-        "internal",
-        { attemptId: string },
         any,
         Name
       >;

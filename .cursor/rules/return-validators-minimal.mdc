@@ -1,0 +1,159 @@
+---
+name: return-validators-generic
+description: Short rules for shared Convex validators, typing, pagination, and system-field stripping
+applies_to: ["convex/**", "packages/backend/convex/**"]
+---
+
+# Return Validator Rules
+
+## Goal
+
+Define validators once, reuse them everywhere, and make handler return types match validator shapes exactly.
+
+## Rules
+
+- **Define return validators in `shared.ts`**
+  - Do not inline return object validators inside functions.
+
+- **Export both validator and inferred type**
+  - Pattern: `export const vUserItem = ...`
+  - Pattern: `export type UserItem = Infer<typeof vUserItem>`
+
+- **Reuse validators instead of duplicating shapes**
+  - Reuse the same validator across component functions, public wrappers, and pagination validators.
+  - Compose from smaller validators when needed.
+
+- **Handler return types must use inferred types**
+  - Use `Promise<UserItem>` or `Promise<UserItem | null>`.
+  - Do not manually rewrite object types in handler signatures.
+  - Very important to surface typescript errors early.
+
+- **Do not expose Convex system fields in return validators**
+  - Assume the table manages its own ids when appropriate.
+  - Do not include `_id` or `_creationTime` in public return shapes.
+  - Prefer `withoutSystemFields(...)` from `convex-helpers` when stripping system fields.
+
+- **Use pagination helpers consistently**
+  - Use `paginationOptsValidator` for paginated query args.
+  - Use `paginationResultValidator(vItemValidator)` for paginated returns.
+  - Reuse the item validator inside the pagination result.
+
+## Core Pattern
+
+```typescript
+import { type Infer, v } from 'convex/values'
+
+export const vUserItem = v.object({
+  userId: v.string(),
+  name: v.string(),
+  email: v.optional(v.string()),
+})
+
+export type UserItem = Infer<typeof vUserItem>
+```
+
+```typescript
+import { type UserItem, vUserItem } from './shared'
+
+export const getUser = query({
+  args: { userId: v.string() },
+  returns: v.optional(vUserItem),
+  handler: async (ctx, args): Promise<UserItem | null> => {
+    // return shape must match vUserItem
+  },
+})
+```
+
+## Pagination Pattern
+
+```typescript
+import { paginationOptsValidator, paginationResultValidator } from 'convex/server'
+import { type Infer, v } from 'convex/values'
+
+export const vUserListArgs = v.object({
+  paginationOpts: paginationOptsValidator,
+  filter: v.optional(v.object({
+    status: v.optional(v.string()),
+    search: v.optional(v.string()),
+  })),
+})
+
+export const vPaginatedUsers = paginationResultValidator(vUserItem)
+
+export type UserListArgs = Infer<typeof vUserListArgs>
+export type PaginatedUsers = Infer<typeof vPaginatedUsers>
+```
+
+## System Field Stripping Pattern
+
+```typescript
+import { withoutSystemFields } from 'convex-helpers'
+
+const serializedUser = withoutSystemFields(user)
+const serializedPage = result.page.map(withoutSystemFields)
+```
+
+Use `withoutSystemFields` when:
+
+- **[single return]** Returning one document as a public shape
+- **[list return]** Returning arrays of documents
+- **[paginated return]** Returning `page` items from `paginationResultValidator(...)`
+
+## Reuse Pattern
+
+```typescript
+export const vUserCreateArgs = v.object({
+  name: v.string(),
+  email: v.optional(v.string()),
+})
+
+export const vUserUpdateArgs = v.object({
+  userId: v.string(),
+  name: v.optional(v.string()),
+  email: v.optional(v.string()),
+})
+
+export const createUser = mutation({
+  args: vUserCreateArgs,
+  returns: vUserItem,
+  handler: async (ctx, args): Promise<UserItem> => {
+    // ...
+  },
+})
+
+export const listUsers = query({
+  args: vUserListArgs,
+  returns: vPaginatedUsers,
+  handler: async (ctx, args): Promise<PaginatedUsers> => {
+    // ...
+  },
+})
+```
+
+## Anti-Patterns
+
+- **[inline return validators]**
+  - Bad: `returns: v.object({ ... })` inside function files for reusable shapes
+  - Good: define once in `shared.ts` or `validators.ts`
+
+- **[manual type duplication]**
+  - Bad: `Promise<{ userId: string; name: string }>`
+  - Good: `Promise<UserItem>`
+
+- **[custom pagination shapes]**
+  - Bad: custom `{ items, hasNextPage }` object
+  - Good: `paginationResultValidator(vUserItem)`
+
+- **[manual system field stripping]**
+  - Bad: `const { _id, _creationTime, ...rest } = doc`
+  - Good: `withoutSystemFields(doc)`
+
+## Quick Checklist
+
+- **[shared]** Validator is defined in `shared.ts`
+- **[type]** Matching `Infer<typeof ...>` type is exported
+- **[returns]** Function `returns` uses shared validator
+- **[handler]** Handler return type uses inferred type
+- **[system fields]** `_id` and `_creationTime` are not exposed
+- **[pagination]** Paginated queries use `paginationOptsValidator` and `paginationResultValidator`
+- **[reuse]** Existing validators are reused before creating new ones
