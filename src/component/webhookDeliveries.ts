@@ -201,8 +201,7 @@ export const scheduleDelivery = internalMutation({
     const doc = await ctx.db.get(args.deliveryId);
     if (!doc) return false;
     if (doc.state !== "pending" && doc.state !== "retrying") return false;
-    type InternalWithActions = typeof internal & { actions: { processDelivery: import("convex/server").FunctionReference<"action", "internal", { deliveryId: Id<"webhookDeliveries"> }, void> } };
-    await ctx.scheduler.runAfter(0, (internal as InternalWithActions).actions.processDelivery, {
+    await ctx.scheduler.runAfter(0, internal.actions.processDelivery, {
       deliveryId: args.deliveryId,
     });
     return true;

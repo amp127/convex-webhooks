@@ -70,13 +70,13 @@
     }
   },
   "peerDependencies": {
-    "@convex-dev/workpool": "^0.3.0",
+    "@convex-dev/workpool": "^0.4.0",
     "convex": "^1.24.8",
     "convex-helpers": "^0.1.94"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.2",
-    "@convex-dev/workpool": "0.3.1",
+    "@convex-dev/workpool": "0.4.3",
     "@edge-runtime/vm": "5.0.0",
     "@eslint/eslintrc": "3.3.3",
     "@eslint/js": "9.39.2",
@@ -92,9 +92,9 @@
     "@vitejs/plugin-react": "5.1.3",
     "autoprefixer": "10.4.24",
     "chokidar-cli": "3.0.0",
-    "convex": "1.31.7",
-    "convex-helpers": "0.1.111",
-    "convex-test": "0.0.41",
+    "convex": "^1.34.0",
+    "convex-helpers": "^0.1.111",
+    "convex-test": "^0.0.41",
     "cpy-cli": "7.0.0",
     "eslint": "9.39.2",
     "eslint-plugin-react": "7.37.5",

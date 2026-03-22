@@ -191,9 +191,10 @@ export const processDelivery = internalAction({
  * - Managed: create event + delivery for a registered endpoint, sign (Standard Webhooks), schedule processDelivery, return deliveryId.
  */
 export const sendWebhook = internalAction({
-  args: vSendWebhookArgs,
+  // Root must be v.object() for actions (not a top-level v.union).
+  args: v.object({ spec: vSendWebhookArgs }),
   returns: vSendWebhookResult,
-  handler: async (ctx, args): Promise<SendWebhookResult> => {
+  handler: async (ctx, { spec: args }): Promise<SendWebhookResult> => {
     if (args.kind === "simple") {
       const res = await fetch(args.url, {
         method: "POST",

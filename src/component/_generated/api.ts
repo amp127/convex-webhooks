@@ -8,8 +8,14 @@
  * @module
  */
 
+import type * as actions from "../actions.js";
 import type * as deliveryAttempts from "../deliveryAttempts.js";
 import type * as eventCategories from "../eventCategories.js";
+import type * as eventRegistry from "../eventRegistry.js";
+import type * as signing from "../signing.js";
+import type * as webhookDeliveries from "../webhookDeliveries.js";
+import type * as webhookEndpoints from "../webhookEndpoints.js";
+import type * as webhookEvents from "../webhookEvents.js";
 
 import type {
   ApiFromModules,
@@ -19,8 +25,14 @@ import type {
 import { anyApi, componentsGeneric } from "convex/server";
 
 const fullApi: ApiFromModules<{
+  actions: typeof actions;
   deliveryAttempts: typeof deliveryAttempts;
   eventCategories: typeof eventCategories;
+  eventRegistry: typeof eventRegistry;
+  signing: typeof signing;
+  webhookDeliveries: typeof webhookDeliveries;
+  webhookEndpoints: typeof webhookEndpoints;
+  webhookEvents: typeof webhookEvents;
 }> = anyApi as any;
 
 /**

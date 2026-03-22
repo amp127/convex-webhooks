@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "convex-create-component": {
+      "source": "get-convex/agent-skills",
+      "sourceType": "github",
+      "computedHash": "7d83a8297fceca8dca482c098e9062121d622d864e54e5ceb5397a2ee0f2c182"
+    }
+  }
+}
