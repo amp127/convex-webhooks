@@ -24,24 +24,24 @@ A managed webhook delivery system for sending events to user-defined URLs. Handl
 
 ### ✅ Core Requirements
 
-- [x] **Queue outbound webhooks with configurable rate limits per destination URL**
-- [x] **Automatic retries with exponential backoff for 5xx errors and network failures**
-- [x] **Configurable delivery modes: serialized (in-order) or parallel (out-of-order on failure)**
-- [x] **Generate and store ed25519 key pairs per destination for request signing**
-- [x] **Sign payloads with private key, expose public key for recipient verification**
-- [x] **Track delivery status per webhook: pending, delivered, failed, retrying**
-- [x] **Store delivery attempts with timestamp, response code, and error details**
-- [x] **Validate destination URLs on registration (optional HEAD request to confirm reachability)**
-- [x] **Configurable max retry attempts and retry window before marking as permanently failed**
-- [x] **Expose query interface for delivery history and failed webhook inspection**
+- [ ] **Queue outbound webhooks with configurable rate limits per destination URL**
+- [ ] **Automatic retries with exponential backoff for 5xx errors and network failures**
+- [ ] **Configurable delivery modes: serialized (in-order) or parallel (out-of-order on failure)**
+- [ ] **Generate and store ed25519 key pairs per destination for request signing**
+- [ ] **Sign payloads with private key, expose public key for recipient verification**
+- [ ] **Track delivery status per webhook: pending, delivered, failed, retrying**
+- [ ] **Store delivery attempts with timestamp, response code, and error details**
+- [ ] **Validate destination URLs on registration (optional HEAD request to confirm reachability)**
+- [ ] **Configurable max retry attempts and retry window before marking as permanently failed**
+- [ ] **Expose query interface for delivery history and failed webhook inspection**
 
 ### ✅ Implementation Status
 
-- [x] **Event Management**: Core event storage and retrieval system
-- [x] **Workpool Integration**: Background processing infrastructure
-- [x] **Component Architecture**: Modular Convex component design
-- [x] **Type Safety**: Full TypeScript type definitions
-- [x] **Schema Design**: Optimized database schema for webhook delivery
+- [ ] **Event Management**: Core event storage and retrieval system
+- [ ] **Workpool Integration**: Background processing infrastructure
+- [ ] **Component Architecture**: Modular Convex component design
+- [ ] **Type Safety**: Full TypeScript type definitions
+- [ ] **Schema Design**: Optimized database schema for webhook delivery
 
 ## 🚀 Basic Setup
 

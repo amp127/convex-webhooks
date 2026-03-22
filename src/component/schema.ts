@@ -26,7 +26,10 @@ export const schema = defineSchema({
     .index("categoryName", ["categoryName"])
     .index("by_tenantId", ["tenantId"]),
 
-  eventRegistry: defineTable(eventRegistryFields).index("eventName", ["eventName"]),
+  eventRegistry: defineTable(eventRegistryFields)
+    .index("eventName", ["eventName"])
+    .index("by_tenantId", ["tenantId"])
+    .index("by_status", ["status"]),
 
   /**
    * Persisted outbound event before delivery (O-REL-1). Payload shape per O-PAY-1.
